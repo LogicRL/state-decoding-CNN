@@ -324,7 +324,10 @@ class myDataset(torch.utils.data.Dataset):
 def main():
 	CLASSES = [15]
 	model = CNNModel(CLASSES)
-	model.model_train()
+	#model.model_train()
+	state = torch.Tensor(1, 1, 84, 84)
+	decoded_state = model.decode_state(state)
+	print("decoded state: {}".format(decoded_state))
 
 
 if __name__ == '__main__':
