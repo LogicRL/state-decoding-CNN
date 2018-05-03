@@ -17,8 +17,8 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader, Dataset
 from collections import namedtuple
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, PackedSequence
-from inferno.trainers.basic import Trainer
-from inferno.trainers.callbacks.base import Callback
+#from inferno.trainers.basic import Trainer
+#from inferno.trainers.callbacks.base import Callback
 from sklearn.model_selection import train_test_split
 import torch.nn.functional as F
 import time
