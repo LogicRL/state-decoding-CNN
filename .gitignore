@@ -1,0 +1,8 @@
+*.pyc
+*.npy
+*.DS_Store
+*__pycache__
+
+/lev1_labeled/*
+/save_weights/*
+

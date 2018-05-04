@@ -20,7 +20,7 @@ from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, Packed
 from sklearn.model_selection import train_test_split
 import torch.nn.functional as F
 import time
-from LogicRLUtils import *
+from utils.LogicRLUtils import *
 
 
 def tuple_tostring(tuple):
