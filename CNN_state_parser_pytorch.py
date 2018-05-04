@@ -17,8 +17,6 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader, Dataset
 from collections import namedtuple
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, PackedSequence
-#from inferno.trainers.basic import Trainer
-#from inferno.trainers.callbacks.base import Callback
 from sklearn.model_selection import train_test_split
 import torch.nn.functional as F
 import time
@@ -294,6 +292,23 @@ class CNNModel(torch.nn.Module):
 		
 		return decoded_state
 
+	def decode_state_logits(self, input_x):
+		'''input of shape (1, 1, 84, 84)'''
+		self.eval()
+		
+		output = self.forward(to_variable(input_x))
+
+		output = output.data.numpy()[0] # TODO
+		decoded_state = get_state_logits(output, self.IDX_TO_LABELSTR)
+		
+		return decoded_state
+
+def get_state_logits(img_label, IDX_TO_LABELSTR):
+	labels = []
+	for i, logit in enumerate(img_label):
+		labels.append((IDX_TO_LABELSTR[i], logit))
+	return labels
+
 def get_state(img_label, IDX_TO_LABELSTR):
 	labels = []
 	for i, logit in enumerate(img_label):
@@ -335,7 +350,8 @@ def main():
 	#model.model_train()
 	#state = torch.Tensor(1, 1, 84, 84)
 	state = FrameToDecoderState(np.load('errimg_0.npy'))
-	decoded_state = model.decode_state(state)
+	#decoded_state = model.decode_state(state)
+	decoded_state = model.decode_state_logits(state)
 	print("decoded state: {}".format(decoded_state))
 	#print(model)
 
