@@ -20,7 +20,7 @@ from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence, Packed
 from sklearn.model_selection import train_test_split
 import torch.nn.functional as F
 import time
-from utils.LogicRLUtils import *
+from LogicRLUtils import *
 
 
 def tuple_tostring(tuple):
@@ -100,10 +100,13 @@ class CNNModel(torch.nn.Module):
 	if more states is added, should call model.model_train() to let the network learn train first.
 	'''
 	def __init__(self, CLASSES, 
-		pretrained_model_pth='./save_weights/parser_epoch_23_loss_0.0002853113460746086_valacc_0.9986979166666667.t7'):
+		pretrained_model_pth=None,
+		text_dir='./Labeled_0504_part2/imgLevel1Label_combined', 
+		img_dir='./Labeled_0504_part2/imgLevel1Label_combined', 
+		label_file='./Labeled_0504_part2/0_allpossible.txt'):
 		super(CNNModel, self).__init__()
 
-		all_imgs, all_labels, LABELS, IDX_TO_LABELSTR, CLASS = parse_annotation('lev1_labeled/imgLevel1Label', 'lev1_labeled/imgLevel1Label', 'lev1_labeled/0_allpossible.txt')
+		all_imgs, all_labels, LABELS, IDX_TO_LABELSTR, CLASS = parse_annotation(text_dir, img_dir, label_file)
 
 		X_train, X_valid, y_train, y_valid = train_test_split(
 				all_imgs, all_labels, random_state=6060, train_size=0.75)
@@ -116,7 +119,7 @@ class CNNModel(torch.nn.Module):
 							  'init_lr',
 							  'cuda'])(
 			32,
-			'save_weights/',
+			'save_weights_2/',
 			40,
 			1e-4,
 			False)
@@ -181,14 +184,16 @@ class CNNModel(torch.nn.Module):
 		#self.optimizer = optim.SGD(self.parameters(), lr=args.init_lr)
 
 		# load pretrained weights
-		pretrained_dict = torch.load(pretrained_model_pth)
-		model_dict = self.state_dict()
+		if pretrained_model_pth:
+			print("-----------loading pretrained model-----------")
+			pretrained_dict = torch.load(pretrained_model_pth)
+			model_dict = self.state_dict()
 
-		pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-		model_dict.update(pretrained_dict) 
-		self.load_state_dict(model_dict)
-
-		#self.load_state_dict(pretrained_dict)
+			pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+			model_dict.update(pretrained_dict) 
+			self.load_state_dict(model_dict)
+		else:
+			print("-----------not loading model-----------")
 
 
 		if torch.cuda.is_available():
@@ -345,13 +350,13 @@ class myDataset(torch.utils.data.Dataset):
 		return len(self.input_x)
 
 def main():
-	CLASSES = [15]
-	model = CNNModel(CLASSES)
+	CLASSES = [14]
+	model = CNNModel(CLASSES, pretrained_model_pth='./save_weights_2/parser_epoch_17_loss_7.19790995944436e-05_valacc_0.9992972883597884.t7')
 	#model.model_train()
 	#state = torch.Tensor(1, 1, 84, 84)
 	state = FrameToDecoderState(np.load('errimg_0.npy'))
-	#decoded_state = model.decode_state(state)
-	decoded_state = model.decode_state_logits(state)
+	decoded_state = model.decode_state(state)
+	#decoded_state = model.decode_state_logits(state)
 	print("decoded state: {}".format(decoded_state))
 	#print(model)
 
