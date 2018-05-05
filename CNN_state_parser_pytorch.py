@@ -101,9 +101,10 @@ class CNNModel(torch.nn.Module):
 	'''
 	def __init__(self, CLASSES, 
 		pretrained_model_pth=None,
-		text_dir='./Labeled_0504_part2/imgLevel1Label_combined', 
-		img_dir='./Labeled_0504_part2/imgLevel1Label_combined', 
-		label_file='./Labeled_0504_part2/0_allpossible.txt'):
+		text_dir='../annotated_data/symbolic_states_room1', 
+		img_dir='../annotated_data/symbolic_states_room1', 
+		label_file='../annotated_data/predicates.txt',
+		weights_dir='../model_weights'):
 		super(CNNModel, self).__init__()
 
 		all_imgs, all_labels, LABELS, IDX_TO_LABELSTR, CLASS = parse_annotation(text_dir, img_dir, label_file)
@@ -119,7 +120,7 @@ class CNNModel(torch.nn.Module):
 							  'init_lr',
 							  'cuda'])(
 			32,
-			'save_weights_2/',
+			weights_dir + '/',
 			40,
 			1e-4,
 			False)
