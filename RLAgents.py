@@ -381,8 +381,8 @@ class DQN_Agent():
 		# initialize the replay memory
 		self.replay_memory = None
 		if self.replay:
-			self.memory_size = 1000000
-			self.burn_in = 5000
+			self.memory_size = 3000
+			self.burn_in = 1000
 			self.replay_memory = Replay_Memory(self.env_name, self.mini_task, self.memory_size, self.burn_in)
 
 		# initialize the Q-network and load weights if exist
