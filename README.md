@@ -23,6 +23,6 @@ then as the agent goes deeper into the game (a different room), it will have mor
 Below is the authorship information for this project.
 
   * __Author__:  Shangwu Yao
-  * __Emain__:   shangwuyao@gmail.com
+  * __Email__:   shangwuyao@gmail.com
 
 Copyright (C) 2018, Shangwu Yao. All rights reserved.
