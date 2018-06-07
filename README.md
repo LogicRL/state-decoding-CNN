@@ -1,5 +1,5 @@
 # state-decoding-CNN
-CNN network for symbolic state monitoring, applied on MonteZuma's Revenge, achieved 99.96% accuracy.
+CNN network for symbolic state monitoring, applied on MonteZuma's Revenge, achieved 99.96% accuracy (PyTorch version).
 
 An example of this: 
 
